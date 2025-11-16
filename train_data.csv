@@ -1,0 +1,59 @@
+﻿text,label
+"Chào bạn!",greeting
+"Hi, bạn khỏe không?",greeting
+"Chào buổi sáng!",greeting
+"Xin chào, mình tên là An",greeting
+"Bạn có muốn trò chuyện không?",greeting
+"Bạn thật ngu ngốc và không ai thích bạn",violence
+"Tớ bị đánh bởi mấy bạn cùng lớp tuần trước",violence
+"Ngày hôm nay mình đi học bình thường",normal
+"Bạn ấy nói xấu tớ suốt trên mạng",violence
+"Mình không biết làm bài tập này",normal
+"Bạn ta thường xuyên đe dọa tớ",violence
+"Thầy cô hôm nay rất tốt",normal
+"Mình bị gọi là kẻ hèn",violence
+"Mấy bạn trong lớp trêu mình liên tục",violence
+"Xin lỗi, mình đã làm phiền bạn",normal
+"Cảm ơn bạn đã chia sẻ!",end
+"Cảm ơn, Mimir đã nghe mình",end
+"Mình xin lỗi vì đã làm bạn phiền",normal
+"Bạn ta đang lan truyền tin xấu về mình",violence
+"Nhờ Mimir giúp mình với",ask_help
+"Bạn đánh mình trong giờ ra chơi",violence
+"Tớ bị lừa tiền bởi bạn cùng lớp",violence
+"Mình cảm thấy ổn hôm nay",normal
+"Bạn có thể giúp mình với bài tập này không?",ask_help
+"Cảm ơn Mimir, mình ổn rồi",end
+"Mình vừa bị gọi là kẻ xấu trên nhóm lớp",violence
+"Chào Mimir, mình muốn trò chuyện",greeting
+"Mình không biết phải làm gì khi bị bắt nạt",ask_help
+"Cảm ơn vì đã lắng nghe mình",end
+"Hôm nay trời đẹp nhỉ?",normal
+"Bạn vừa trêu mình trên mạng xã hội",violence
+"Mình bị chửi bới trong lớp",violence
+"Chào bạn, bạn đang làm gì?",greeting
+"Mình vừa bị lấy đồ của mình",violence
+"Bạn ta đang đe dọa mình",violence
+"Xin chào, bạn có khỏe không?",greeting
+"Bạn vừa đuổi mình ra khỏi lớp",violence
+"Cảm ơn, mình sẽ thử theo lời bạn",end
+"Mình chỉ muốn chia sẻ một chút thôi",normal
+"Bạn ta đánh mình hôm nay",violence
+"Chào Mimir, mình cần lời khuyên",ask_help
+"Mình bị bạn cùng lớp trêu chọc",violence
+"Bạn ấy lừa mình tiền",violence
+"Cảm ơn, mình sẽ cẩn thận hơn",end
+"Chào, mình muốn trò chuyện một chút",greeting
+"Mình bị quấy rối ở lớp",violence
+"Bạn vừa mắng mình trước mặt cả lớp",violence
+"Xin chào, mình tên Linh",greeting
+"Mình cảm ơn Mimir đã lắng nghe",end
+"Mình sợ bị các bạn bắt nạt",violence
+"Chào buổi chiều!",greeting
+"Cảm ơn bạn đã quan tâm",end
+"Mình bị bắt nạt trên mạng",violence
+"Bạn vừa xô mình trong giờ thể dục",violence
+"Mình muốn được giúp cách giải quyết chuyện này",ask_help
+"Mình hơi buồn vì bạn bè không quan tâm mình",complain
+"Mình muốn kể chuyện một ngày bình thường của mình",normal
+"Mình thấy mệt mỏi vì học hành",complain
