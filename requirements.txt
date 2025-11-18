@@ -1,4 +1,8 @@
-﻿flask
+torch
+transformers
+Pillow
+requests
+flask
 flask-cors
 pandas
 scikit-learn
