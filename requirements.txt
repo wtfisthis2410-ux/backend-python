@@ -1,9 +1,13 @@
-torch
-transformers
-Pillow
-requests
+# Backend chính
 flask
 flask-cors
 pandas
 scikit-learn
 gunicorn
+requests
+
+# Violence detector
+torch
+transformers
+Pillow
+opencv-python
