@@ -39,7 +39,7 @@ def train():
     global df, X, vectorizer
     df = pd.DataFrame(new_data)
     vectorizer = TfidfVectorizer()
-    X = vectorizer.fit_transform(df["question"])
+    X = vectorizer.fit_transform(df["text"])
     return jsonify({"message": "Model trained successfully"})
 
 @app.route("/contact", methods=["POST"])
