@@ -18,7 +18,7 @@ except FileNotFoundError:
         {"question": "Who to talk to if bullied?", "answer": "Talk to a teacher or counselor."}
     ])
 vectorizer = TfidfVectorizer()
-X = vectorizer.fit_transform(df["question"])
+X = vectorizer.fit_transform(df["text"])
 
 @app.route("/chat", methods=["POST"])
 def chat():
