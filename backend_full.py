@@ -10,7 +10,7 @@ CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://front
 
 # --- Chatbot ---
 try:
-    df = pd.read_csv("traindata.csv")
+    df = pd.read_csv("train_data.csv")
 except FileNotFoundError:
     df = pd.DataFrame([
         {"question": "What is school violence?", "answer": "School violence refers to harmful behaviors."},
