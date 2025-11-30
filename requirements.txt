@@ -6,8 +6,11 @@ scikit-learn
 gunicorn
 requests
 
-# Violence detector
+# Violence detector / PhoBERT
 torch
 transformers
+peft
+
+# Image processing
 Pillow
 opencv-python
