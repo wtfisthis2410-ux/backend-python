@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 
-// eslint-disable-next-line no-unused-vars
 const API_URL = process.env.REACT_APP_API_URL || "https://backend-python-ed7p.onrender.com";
 
 export default function ViolenceDetector() {
@@ -10,7 +9,7 @@ export default function ViolenceDetector() {
 
   const uploadImage = async (file) => {
     const formData = new FormData();
-    formData.append("file", file); // ⭐ SỬA TỪ "image" → "file"
+    formData.append("file", file);
 
     try {
       const res = await axios.post(`${API_URL}/detect-image`, formData, {
@@ -25,7 +24,7 @@ export default function ViolenceDetector() {
 
   const uploadVideo = async (file) => {
     const formData = new FormData();
-    formData.append("file", file); // ⭐ SỬA TỪ "video" → "file"
+    formData.append("file", file);
 
     try {
       const res = await axios.post(`${API_URL}/detect-video`, formData, {
@@ -42,9 +41,9 @@ export default function ViolenceDetector() {
     <div>
       <h2 className="text-xl font-bold mb-4">Nhận diện bạo lực từ Ảnh / Video</h2>
 
-      {/* UPLOAD ẢNH */}
+      {/* Upload Ảnh */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">📷 Tải ảnh lên</h3>
+        <h3 className="font-semibold mb-2">Tải ảnh lên</h3>
         <input
           type="file"
           accept="image/*"
@@ -60,9 +59,9 @@ export default function ViolenceDetector() {
         )}
       </div>
 
-      {/* UPLOAD VIDEO */}
+      {/* Upload Video */}
       <div className="mb-6">
-        <h3 className="font-semibold mb-2">🎥 Tải video lên</h3>
+        <h3 className="font-semibold mb-2">Tải video lên</h3>
         <input
           type="file"
           accept="video/*"
