@@ -1,80 +1,134 @@
-import useState from "react";
-import axios from "axios";
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import os
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+import random
 
-const API_URL = process.env.REACT_APP_API_URL || "https://backend-python-ed7p.onrender.com";
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://frontend-1-b0bm.onrender.com"]}})
 
-export default function ViolenceDetector() {
-  const [imageResult, setImageResult] = useState(null);
-  const [videoResult, setVideoResult] = useState(null);
+# ====================================================
+# 1. LOAD TRAIN DATA
+# ====================================================
+try:
+    df = pd.read_csv("train_data.csv")
+except FileNotFoundError:
+    df = pd.DataFrame([
+        {"text": "Chào bạn", "label": "greeting"},
+        {"text": "Mình bị đánh", "label": "violence"},
+        {"text": "Cảm ơn bạn", "label": "end"}
+    ])
 
-  const uploadImage = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(df["text"])
+y = df["label"]
 
-    try {
-      const res = await axios.post(`${API_URL}/detect-image`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setImageResult(res.data);
-    } catch (err) {
-      alert("Lỗi khi gửi ảnh!");
-      console.error(err);
-    }
-  };
+model = LogisticRegression()
+model.fit(X, y)
 
-  const uploadVideo = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await axios.post(`${API_URL}/detect-video`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setVideoResult(res.data);
-    } catch (err) {
-      alert("Lỗi khi gửi video!");
-      console.error(err);
-    }
-  };
-
-  return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Nhận diện bạo lực từ Ảnh / Video</h2>
-
-      {/* Upload Ảnh */}
-      <div className="mb-6">
-        <h3 className="font-semibold mb-2">Tải ảnh lên</h3>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => uploadImage(e.target.files[0])}
-        />
-
-        {imageResult && (
-          <div className="mt-3 p-3 bg-gray-100 rounded">
-            <p><b>Xác suất bạo lực:</b> {imageResult.prob_violent?.toFixed(4)}</p>
-            <p><b>Xác suất không bạo lực:</b> {imageResult.prob_nonviolent?.toFixed(4)}</p>
-            <p><b>Kết luận:</b> {imageResult.violent ? "Có bạo lực" : "Không bạo lực"}</p>
-          </div>
-        )}
-      </div>
-
-      {/* Upload Video */}
-      <div className="mb-6">
-        <h3 className="font-semibold mb-2">Tải video lên</h3>
-        <input
-          type="file"
-          accept="video/*"
-          onChange={(e) => uploadVideo(e.target.files[0])}
-        />
-
-        {videoResult && (
-          <div className="mt-3 p-3 bg-gray-100 rounded">
-            <p><b>Tỷ lệ bạo lực:</b> {(videoResult.violent_rate * 100).toFixed(2)}%</p>
-            <p><b>Kết luận:</b> {videoResult.violent ? "Video có bạo lực" : "Video an toàn"}</p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+# ====================================================
+# 2. BOT RESPONSES
+# ====================================================
+RESPONSES = {
+    "greeting": [
+        "Chào bạn! Mimir đang nghe bạn đây.",
+        "Xin chào! Bạn muốn chia sẻ điều gì?",
+        "Hello, mình ở đây để trò chuyện với bạn!"
+    ],
+    "normal": [
+        "Mình hiểu rồi! Bạn muốn nói thêm gì không?",
+        "Cảm ơn bạn đã chia sẻ, mọi thứ vẫn ổn chứ?",
+        "Nghe có vẻ là một ngày bình thường đó."
+    ],
+    "violence": [
+        "Mình rất tiếc khi nghe điều đó. Bạn có ổn không?",
+        "Chuyện đó nghiêm trọng đấy… bạn có thể kể chi tiết hơn không?",
+        "Nếu bạn thấy bất an, hãy nói với thầy cô hoặc người lớn mà bạn tin tưởng nhé."
+    ],
+    "complain": [
+        "Mình nghe nè… điều đó chắc khiến bạn mệt mỏi lắm.",
+        "Ai cũng có những ngày tệ… bạn muốn tâm sự thêm không?",
+        "Nghe có vẻ bạn đã chịu áp lực khá nhiều."
+    ],
+    "ask_help": [
+        "Bạn cần giúp gì? Mimir luôn sẵn sàng hỗ trợ.",
+        "Được thôi, bạn đang cần trợ giúp ở phần nào?",
+        "Bạn muốn mình hỗ trợ điều gì?"
+    ],
+    "end": [
+        "Cảm ơn bạn đã chia sẻ! Khi nào cần cứ nhắn Mimir nhé.",
+        "Chúc bạn một ngày tốt lành!",
+        "Mimir luôn sẵn sàng khi bạn cần."
+    ]
 }
+
+DEFAULT_RESPONSE = "Mimir chưa hiểu ý bạn lắm, bạn có thể nói lại được không?"
+
+# ====================================================
+# 3. CHAT ENDPOINT
+# ====================================================
+@app.route("/chat", methods=["POST"])
+def chat():
+    user_input = request.json.get("message", "")
+
+    if not user_input.strip():
+        return jsonify({"reply": "Bạn chưa nhập tin nhắn nào cả."})
+
+    vector = vectorizer.transform([user_input])
+    predicted_label = model.predict(vector)[0]
+
+    reply = random.choice(RESPONSES.get(predicted_label, [DEFAULT_RESPONSE]))
+
+    return jsonify({"reply": reply})
+
+# ====================================================
+# 4. TRAIN ENDPOINT
+# ====================================================
+@app.route("/train", methods=["POST"])
+def train():
+    new_data = request.json.get("data", [])
+
+    if not new_data:
+        return jsonify({"message": "No data provided"})
+
+    global df, X, y, vectorizer, model
+
+    df = pd.DataFrame(new_data)
+
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(df["text"])
+    y = df["label"]
+
+    model = LogisticRegression()
+    model.fit(X, y)
+
+    df.to_csv("train_data.csv", index=False)
+
+    return jsonify({"message": "Model trained successfully"})
+
+# ====================================================
+# 5. CONTACT + HEALTH
+# ====================================================
+@app.route("/contact", methods=["POST"])
+def contact():
+    data = request.json
+    name = data.get("name")
+    email = data.get("email")
+    message = data.get("message")
+
+    print(f"[CONTACT] From {name} ({email}): {message}")
+
+    return jsonify({"message": "ok"})
+
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "running"})
+
+# ====================================================
+# 6. RUN SERVER
+# ====================================================
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
