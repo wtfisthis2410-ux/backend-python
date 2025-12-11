@@ -7,7 +7,37 @@ from sklearn.linear_model import LogisticRegression
 import random
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://frontend-1-b0bm.onrender.com"]}})
+
+# ====================================================
+# CORS FIXED – CHO PHÉP RENDER + FRONTEND
+# ====================================================
+CORS(app,
+     resources={r"/*": {
+         "origins": [
+             "http://localhost:3000",
+             "https://frontend-1-b0bm.onrender.com"
+         ]
+     }},
+     supports_credentials=True)
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "https://frontend-1-b0bm.onrender.com"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    return response
+
+@app.route("/chat", methods=["OPTIONS"])
+def chat_options():
+    return "", 200
+
+@app.route("/train", methods=["OPTIONS"])
+def train_options():
+    return "", 200
+
+@app.route("/contact", methods=["OPTIONS"])
+def contact_options():
+    return "", 200
 
 # ====================================================
 # 1. LOAD TRAIN DATA
@@ -97,7 +127,7 @@ def train():
 
     df = pd.DataFrame(new_data)
 
-    vectorizer = TfidfVectorizer()
+    vectorizer = TfididfVectorizer()
     X = vectorizer.fit_transform(df["text"])
     y = df["label"]
 
